@@ -1,1 +1,1 @@
-{"note":"Don't delete this file! It's used internally to help with page regeneration.","tagline":"Listen Music Via Internet","name":"Self-music","google":"","body":"# self-music #\r\n> *收听网盘中的音乐*\r\n\r\n----------\r\n\r\n- Web框架：Mojolicious\r\n\r\n- 播放器：jPlayer\r\n\r\n- Web前端：Bootstrap\r\n"}
+{"body":"- Web框架：Mojolicious\r\n\r\n- 播放器：jPlayer\r\n\r\n- Web前端：Bootstrap\r\n","note":"Don't delete this file! It's used internally to help with page regeneration.","name":"self-music","tagline":"收听网盘中的音乐","google":""}
