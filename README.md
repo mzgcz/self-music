@@ -3,8 +3,8 @@
 
 ----------
 
-- **Web框架：Mojolicious**
+- Web框架：Mojolicious
 
-- **播放器：jPlayer**
+- 播放器：jPlayer
 
-- **Web前端：Bootstrap**
+- Web前端：Bootstrap
