@@ -244,7 +244,7 @@ __DATA__
         </li>
         <li><a href="http://<%= $pnet %>">账户重置</a></li>
         <li><a href="mailto:<%= $email %>">联系我们</a></li>
-        
+        <li><a href="http://mzgcz.github.com/self-music">协助与支持</a></li>
       </ul>
     </div>
   </div>
