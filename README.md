@@ -1,4 +1,4 @@
-slef-music
+self-music
 ==========
 
 Listen Music Via Internet
