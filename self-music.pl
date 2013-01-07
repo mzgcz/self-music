@@ -183,6 +183,59 @@ __DATA__
     </form>
   </div>
 </div>
+<div class="row-fluid" style="text-align:center">
+  <div class="span12">
+    <div class="alert">
+      使用指南
+    </div>
+  </div>
+</div>
+<div class="row-fluid" style="text-align:center">
+  <div class="span4">
+    <div class="well">
+      <h4>第一步：注册</h4>
+      <p>输入邮箱地址，进行注册</p>
+      <img src="img/注册.png"  alt="注册" width="250" height="100" />
+    </div>
+  </div>
+  <div class="span4">
+    <div class="well">
+      <h4>第二步：邮件</h4>
+      <p>登录注册邮箱，接收邮件</p>
+      <img src="img/邮件.png"  alt="邮件" width="250" height="100" />
+    </div>
+  </div>
+  <div class="span4">
+    <div class="well">
+      <h4>第三步：书签</h4>
+      <p>将邮件中的地址保存为书签</p>
+      <img src="img/书签.png"  alt="书签" width="250" height="100" />
+    </div>
+  </div>
+</div>
+<div class="row-fluid" style="text-align:center">
+  <div class="span4">
+    <div class="well">
+      <h4>第四步：授权</h4>
+      <p>打开网址，输入网盘账号，进行授权</p>
+      <img src="img/授权.png"  alt="授权" width="250" height="100" />
+    </div>
+  </div>
+  <div class="span4">
+    <div class="well">
+      <h4>第五步：上传</h4>
+      <p>登录网盘，往应用目录上传音乐</p>
+      <img src="img/上传.png"  alt="上传" width="250" height="100" />
+    </div>
+  </div>
+  <div class="span4">
+    <div class="well">
+      <h4>第六步：音乐</h4>
+      <p>打开网址，开始享受音乐吧</p>
+      <img src="img/音乐.png"  alt="音乐" width="250" height="100" />
+    </div>
+  </div>
+</div>
 
 @@ register.html.ep
 % layout 'default';
@@ -245,6 +298,7 @@ __DATA__
         <li><a href="http://<%= $pnet %>">账户重置</a></li>
         <li><a href="mailto:<%= $email %>">联系我们</a></li>
         <li><a href="http://mzgcz.github.com/self-music">协助与支持</a></li>
+        <li><a href="#">最近计划：调整Mojolicious::Lite为Mojolicious</a></li>
       </ul>
     </div>
   </div>
