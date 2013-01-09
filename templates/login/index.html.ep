@@ -1,0 +1,110 @@
+% layout 'index';
+% title 'Self Music - 自己的音乐';
+<div class="row-fluid">
+  <div class="span12">
+    <div class="hero-unit">
+      <h1>Self Music - 自己的音乐</h1>
+    </div>
+  </div>
+</div>
+<div class="row-fluid">
+  <div class="span8">
+    <div>
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <td><span class="label label-info">简介</span></td>
+            <td>self-music 是由 self-app 提供的在线音乐播放服务，用于播放用户网盘中的音乐</td>
+          </tr>
+          <tr>
+            <td><span class="label label-info">音乐</span></td>
+            <td>支持 HTML5 指定的 mp3、ogg 和 m4a 等格式，具体依赖各浏览器的支持情况</td>
+          </tr>
+          <tr>
+            <td><span class="label label-info">浏览器</span></td>
+            <td>支持谷歌浏览器、搜狗高速浏览器、360安全浏览器超速版，猎豹浏览器，……</td>
+          </tr>
+          <tr>
+            <td><span class="label label-success">建议和支持</span></td>
+            <td>把您的建议和支持发送至邮箱 <%= $email %></td>
+          </tr>
+          <tr>
+            <td><span class="label label-warning">牢骚和抱怨</span></td>
+            <td>把你的牢骚和抱怨发送至邮箱 <%= $email %></td>
+          </tr>
+          <tr>
+            <td><span class="label label-important">重要的提示</span></td>
+            <td>本网页专注于用户注册，注册后登录地址自动发送到注册邮箱，请从邮箱进行登录</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="span4">
+    <form class="well" action="/register" method="get">
+      <fieldset>
+        <legend>注册 或 忘记密码</legend>
+        <div class="control-group">
+          <div class="controls">
+            <input type="email" class="input-big" placeholder="电子邮件" name="email" />
+            <button type="submit" class="btn btn-primary btn-large">确定</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div>
+<div class="row-fluid" style="text-align:center">
+  <div class="span12">
+    <div class="alert">
+      使用指南
+    </div>
+  </div>
+</div>
+<div class="row-fluid" style="text-align:center">
+  <div class="span4">
+    <div class="well">
+      <h4>第一步：注册</h4>
+      <p>输入邮箱地址，进行注册</p>
+      <img src="img/注册.png"  alt="注册" width="250" height="100" />
+    </div>
+  </div>
+  <div class="span4">
+    <div class="well">
+      <h4>第二步：邮件</h4>
+      <p>登录注册邮箱，接收邮件</p>
+      <img src="img/邮件.png"  alt="邮件" width="250" height="100" />
+    </div>
+  </div>
+  <div class="span4">
+    <div class="well">
+      <h4>第三步：书签</h4>
+      <p>将邮件中的地址保存为书签</p>
+      <img src="img/书签.png"  alt="书签" width="250" height="100" />
+    </div>
+  </div>
+</div>
+<div class="row-fluid" style="text-align:center">
+  <div class="span4">
+    <div class="well">
+      <h4>第四步：授权</h4>
+      <p>打开网址，输入网盘账号，进行授权</p>
+      <img src="img/授权.png"  alt="授权" width="250" height="100" />
+    </div>
+  </div>
+  <div class="span4">
+    <div class="well">
+      <h4>第五步：上传</h4>
+      <p>登录网盘，往应用目录上传音乐</p>
+      <img src="img/上传.png"  alt="上传" width="250" height="100" />
+    </div>
+  </div>
+  <div class="span4">
+    <div class="well">
+      <h4>第六步：音乐</h4>
+      <p>打开网址，开始享受音乐吧</p>
+      <img src="img/音乐.png"  alt="音乐" width="250" height="100" />
+    </div>
+  </div>
+</div>
+

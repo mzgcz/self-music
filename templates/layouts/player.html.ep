@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title><%= title %></title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="skin/blue.monday/jplayer.blue.monday.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
+    <script type="text/javascript" src="js/jplayer.playlist.min.js"></script>
+    <style type="text/css">
+      .top-bottom{padding-top:40px;padding-bottom:80px;}
+    </style>
+  </head>
+  <body class="top-bottom">
+    <div class="container">
+      <div class="row-fluid">
+        <div class="span12">
+          <%= content %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

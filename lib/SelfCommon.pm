@@ -2,6 +2,7 @@ package SelfCommon;
 use parent qw(Exporter);
 
 use strict;
+use warnings;
 use Mojo::Util;
 use Digest::HMAC_SHA1;
 use Unicode::Collate::Locale;

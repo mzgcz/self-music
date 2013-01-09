@@ -1,36 +1,31 @@
 package Register;
-use parent qw(Exporter);
-
-BEGIN {
-  push (@INC,'/opt/self-music');
-}
 
 use strict;
+use warnings;
 use utf8;
 use SelfConf;
 use SelfCommon;
+use Mojo::Util;
 use MIME::Lite;
 use MIME::Base64;
 use Authen::SASL;
-use Mojo::Util;
 
-our @EXPORT = qw(encode_user decode_user get_login_addr get_token_addr get_play_addr send_register_mail);
-our $VERSION = 0.10;
+sub new { bless {}, shift }
 
 sub encode_user {
-  my $user = shift;
+  my ($self, $user) = @_;
   
   return SelfCommon::b64_and_url($user);
 }
 
 sub decode_user {
-  my $user = shift;
+  my ($self, $user) = @_;
   
   return Mojo::Util::b64_decode($user);
 }
 
 sub get_login_addr {
-  my ($base_url, $mail) = @_;
+  my ($self, $base_url, $mail) = @_;
   
   my $id = Mojo::Util::md5_sum($mail.SelfCommon::rand_str(32).time());
   my $url = $base_url.'?'.'user='.SelfCommon::b64_and_url($mail).'&'.'id='.$id;
@@ -39,19 +34,19 @@ sub get_login_addr {
 }
 
 sub get_token_addr {
-    my ($net, $user, $id) = @_;
+    my ($self, $net, $user, $id) = @_;
     
     return "http://$net/token?".'user='.SelfCommon::b64_and_url($user).'&'.'id='.$id;
 }
 
 sub get_play_addr {
-    my ($net, $user, $id) = @_;
+    my ($self, $net, $user, $id) = @_;
     
     return "http://$net/play?".'user='.SelfCommon::b64_and_url($user).'&'.'id='.$id;
 }
 
 sub send_register_mail {
-  my ($mail, $url) = @_;
+  my ($self, $mail, $url) = @_;
   
   my $host = SelfConf::SMTP_ADDR;
   my $user = SelfConf::EMAIL_ADDR;

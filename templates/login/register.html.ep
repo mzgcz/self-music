@@ -1,0 +1,6 @@
+% layout 'default';
+% title 'Self Music - 自己的音乐';
+<div class="alert alert-success" style="text-align:center">
+  登录地址已发送到你邮箱，请从邮箱登录。
+</div>
+

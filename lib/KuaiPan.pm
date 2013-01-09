@@ -1,18 +1,13 @@
 package KuaiPan;
-use parent qw(Exporter);
-
-BEGIN {
-  push (@INC,'/opt/self-music');
-}
 
 use strict;
+use warnings;
 use SelfConf;
 use SelfCommon;
 use Mojo::JSON;
 require LWP::UserAgent;
 
-our @EXPORT = qw(request_token authorize_token access_token get_file_list get_file_url);
-our $VERSION = 0.10;
+sub new { bless {}, shift }
 
 my $consumer_secret = SelfConf::JSKP_SECRET;
 
@@ -71,7 +66,7 @@ sub combination_para {
 }
 
 sub request_token {
-  my $cb_url = shift;
+  my ($self, $cb_url) = @_;
   my $url = 'https://openapi.kuaipan.cn/open/requestToken';
   my $oauth_callback = get_callback($cb_url);
   my $oauth_consumer_key = get_consumer_key();
@@ -99,14 +94,14 @@ sub request_token {
 }
 
 sub authorize_token {
-  my $oauth_token = shift;
+  my ($self, $oauth_token) = @_;
   my $url = 'https://www.kuaipan.cn/api.php?ac=open&op=authorise';
   
   return combination_para($url,get_token($oauth_token));
 }
 
 sub access_token {
-  my ($token, $token_secret) = @_;
+  my ($self, $token, $token_secret) = @_;
   my $url = 'https://openapi.kuaipan.cn/open/accessToken';
   my $oauth_consumer_key = get_consumer_key();
   my $oauth_nonce = get_nonce();
@@ -135,7 +130,7 @@ sub access_token {
 
 sub get_file_list {
   my @music_list;
-  my ($token, $token_secret) = @_;
+  my ($self, $token, $token_secret) = @_;
   my $url = 'http://openapi.kuaipan.cn/1/metadata/app_folder';
   my $oauth_consumer_key = get_consumer_key();
   my $oauth_nonce = get_nonce();
@@ -168,7 +163,7 @@ sub get_file_list {
 
 sub get_file_url {
   my @music_list;
-  my ($file, $token, $token_secret) = @_;
+  my ($self, $file, $token, $token_secret) = @_;
   my $url = 'http://api-content.dfs.kuaipan.cn/1/fileops/download_file';
   my $oauth_consumer_key = get_consumer_key();
   my $oauth_nonce = get_nonce();
