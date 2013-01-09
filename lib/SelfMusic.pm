@@ -10,7 +10,7 @@ use SelfCommon;
 sub startup {
   my $self = shift;
   
-  $self->config(hypnotoad => {listen => ['http://*:3000'], workers => 3});
+  $self->config(hypnotoad => {listen => ['http://*:80'], workers => 3});
   
   $self->secret(SelfConf::APP_SECRET);
   
