@@ -1,6 +1,7 @@
 package SelfMusic::Play;
 
 use utf8;
+use Mojo::JSON;
 use Mojo::Base 'Mojolicious::Controller';
 
 my $self_net = SelfConf::NET_ADDR;
@@ -15,8 +16,11 @@ sub play {
   } elsif ($id ne $id_db) {
     $self->render('error', reason=>'你使用的登录地址已过期，请使用新地址登录或重新注册获取新地址');
   } else {
-    my @music_list =  $self->self_kuaipan->get_file_list($oauth_token, $oauth_token_secret);
-    $self->stash(plist => \@music_list);
+    my (%self_music, %self_path);
+    my @play_list = $self->self_kuaipan->get_play_list(\%self_music, \%self_path, $oauth_token, $oauth_token_secret);
+    $self->stash(plist => \@play_list);
+    $self->stash(lists => \%self_music);
+    $self->stash(paths => \%self_path);
     $self->stash(puser => $self->self_register->encode_user($user));
     $self->stash(pid => $id);
     $self->stash(pnet => $self_net);

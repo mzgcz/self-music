@@ -128,10 +128,9 @@ sub access_token {
   return ($oauth_token, $oauth_token_secret);
 }
 
-sub get_file_list {
-  my @music_list;
-  my ($self, $token, $token_secret) = @_;
-  my $url = 'http://openapi.kuaipan.cn/1/metadata/app_folder';
+sub get_one_list {
+  my @musics;
+  my ($self_music, $self_path, $token, $token_secret, $level, $url) = @_;
   my $oauth_consumer_key = get_consumer_key();
   my $oauth_nonce = get_nonce();
   my $oauth_signature_method = get_signature_method();
@@ -149,16 +148,33 @@ sub get_file_list {
   my $response = $ua->get($access_url);
   if ($response->is_success) {
     my $access_json = $json->decode($response->decoded_content);
-    foreach my $file (@{$access_json->{"files"}}) {
-      unless ($file->{"is_deleted"}) {
-        if ($file->{"name"} =~ /\.(mp3|ogg|m4a)$/i) {
-          push @music_list, $file->{"name"};
+    unless ($access_json->{is_deleted}) {
+      foreach my $file (@{$access_json->{"files"}}) {
+        unless ($file->{"is_deleted"}) {
+          if ($file->{"type"} eq "file") {
+            if ($file->{"name"} =~ /\.(mp3|ogg|m4a)$/i) {
+              push @musics, $file->{"name"};
+            }
+          } elsif ($file->{"type"} eq "folder") {
+            if (0 == $level) {
+              get_one_list($self_music, $self_path, $token, $token_secret, $level+1, $url.'/'.SelfCommon::utf8_to_url($file->{"name"}));
+            }
+          }
         }
       }
+      @musics = SelfCommon::sort_by_pinyin(@musics);
+      $self_music->{$access_json->{"name"}} = \@musics;
+      $self_path->{$access_json->{"name"}} = $access_json->{"path"};
     }
   }
+}
+
+sub get_play_list {
+  my ($self, $self_music, $self_path, $token, $token_secret) = @_;
   
-  return SelfCommon::sort_by_pinyin(@music_list);
+  get_one_list($self_music, $self_path, $token, $token_secret, 0, 'http://openapi.kuaipan.cn/1/metadata/app_folder');
+  return SelfCommon::sort_by_pinyin(keys %$self_music);
+  
 }
 
 sub get_file_url {
