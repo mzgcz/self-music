@@ -10,7 +10,7 @@ use SelfCommon;
 sub startup {
   my $self = shift;
   
-  $self->config(hypnotoad => {listen => ['http://*:80'], workers => 5});
+  $self->config(hypnotoad => {listen => ['http://*:80'], workers => 3});
   
   $self->secret(SelfConf::APP_SECRET);
   
@@ -33,6 +33,7 @@ sub startup {
   $r->get('/token')->to('login#token')->name('token');
   $r->get('/play')->to('play#play')->name('play');
   $r->get('/music')->to('play#music')->name('music');
+  $r->get('/demo')->to('play#demo')->name('demo');
 }
 
 1;

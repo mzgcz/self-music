@@ -45,6 +45,12 @@ sub music {
   }
 }
 
+sub demo {
+  my $self = shift;
+  my $url = "http://$self_net/play?user=c2VsZi5tdXNpYy5lZ0BnbWFpbC5jb20%3D&id=a322abeff15f3a66dc5a099ae77b4c21";
+  return $self->redirect_to($url);
+}
+
 1;
 
 __END__

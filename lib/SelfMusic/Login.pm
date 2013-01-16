@@ -9,6 +9,7 @@ sub index {
   my $self = shift;
   
   $self->stash(email => SelfConf::EMAIL_ADDR);
+  $self->stash(net => $self_net);
   $self->render('index');
 }
 

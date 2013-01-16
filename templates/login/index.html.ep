@@ -48,6 +48,7 @@
           <div class="controls">
             <input type="email" class="input-big" placeholder="电子邮件" name="email" />
             <button type="submit" class="btn btn-primary btn-large">确定</button>
+            <a class="btn btn-primary btn-large" href="http://<%= $net %>/demo">游客试用入口</a>
           </div>
         </div>
       </fieldset>
