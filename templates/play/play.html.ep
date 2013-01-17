@@ -1,68 +1,5 @@
 % layout 'player';
 % title 'slef-music';
-<script type="text/javascript">
-    //<![CDATA[
-    $(document).ready(function(){
-        
-	var myPlaylist = new jPlayerPlaylist({
-	    jPlayer: "#jquery_jplayer_1",
-	    cssSelectorAncestor: "#jp_container_1"
-	}, [
-                % for my $music (@{$lists->{"self-music"}}) {
-                        % $music =~ /^(.*)\.\w+$/;
-                        % my $name = $1;
-                        % my $murl;
-                        % if ($paths->{"self-music"} eq '/') {
-                            % $murl = SelfCommon::utf8_to_url($paths->{"self-music"}.$music);
-                        % } else {
-                            % $murl = SelfCommon::utf8_to_url($paths->{"self-music"}.'/'.$music);
-                        % }
-                {
-                  title:"<%= $name %>",
-                % if ($music =~ /\.mp3$/i) {
-                    mp3:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
-                % } elsif ($music =~ /\.ogg$/i) {
-                    oga:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
-                % } elsif ($music =~ /\.m4a$/i) {
-                    m4a:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
-                % }
-                },
-            % }
-	], {
-	    swfPath: "js",
-	    supplied: "m4a, oga, mp3",
-	    wmode: "window"
-	});
-        
-        % foreach my $list (@$plist) {
-            $("#<%= $list %>").click(function() {
-		myPlaylist.setPlaylist([
-                    % for my $music (@{$lists->{$list}}) {
-                        % $music =~ /^(.*)\.\w+$/;
-                        % my $name = $1;
-                        % my $murl;
-                        % if ($paths->{$list} eq '/') {
-                            % $murl = SelfCommon::utf8_to_url($paths->{$list}.$music);
-                        % } else {
-                            % $murl = SelfCommon::utf8_to_url($paths->{$list}.'/'.$music);
-                        % }
-                        {
-                            title:"<%= $name %>",
-                          % if ($music =~ /\.mp3$/i) {
-                              mp3:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
-                          % } elsif ($music =~ /\.ogg$/i) {
-                              oga:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
-                          % } elsif ($music =~ /\.m4a$/i) {
-                              m4a:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
-                          % }
-                        },
-                    % }
-		]);
-	    });
-        % }
-    });
-//]]>
-</script>
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container">
@@ -76,7 +13,7 @@
         <li><a href="http://<%= $pnet %>">账户重置</a></li>
         <li><a href="mailto:<%= $email %>">联系我们</a></li>
         <li><a href="http://mzgcz.github.com/self-music">协助与支持</a></li>
-        <li><a href="#">最近计划：增加示例页面</a></li>
+        <li><a href="#">最近计划：更新示例音乐</a></li>
       </ul>
     </div>
   </div>
@@ -157,3 +94,66 @@
     </table>
   </div>
 </div>
+<script type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        
+	var myPlaylist = new jPlayerPlaylist({
+	    jPlayer: "#jquery_jplayer_1",
+	    cssSelectorAncestor: "#jp_container_1"
+	}, [
+                % for my $music (@{$lists->{"self-music"}}) {
+                        % $music =~ /^(.*)\.\w+$/;
+                        % my $name = $1;
+                        % my $murl;
+                        % if ($paths->{"self-music"} eq '/') {
+                            % $murl = SelfCommon::utf8_to_url($paths->{"self-music"}.$music);
+                        % } else {
+                            % $murl = SelfCommon::utf8_to_url($paths->{"self-music"}.'/'.$music);
+                        % }
+                {
+                  title:"<%= $name %>",
+                % if ($music =~ /\.mp3$/i) {
+                    mp3:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
+                % } elsif ($music =~ /\.ogg$/i) {
+                    oga:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
+                % } elsif ($music =~ /\.m4a$/i) {
+                    m4a:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
+                % }
+                },
+            % }
+	], {
+	    swfPath: "js",
+	    supplied: "m4a, oga, mp3",
+	    wmode: "window"
+	});
+        
+        % foreach my $list (@$plist) {
+            $("#<%= $list %>").click(function() {
+		myPlaylist.setPlaylist([
+                    % for my $music (@{$lists->{$list}}) {
+                        % $music =~ /^(.*)\.\w+$/;
+                        % my $name = $1;
+                        % my $murl;
+                        % if ($paths->{$list} eq '/') {
+                            % $murl = SelfCommon::utf8_to_url($paths->{$list}.$music);
+                        % } else {
+                            % $murl = SelfCommon::utf8_to_url($paths->{$list}.'/'.$music);
+                        % }
+                        {
+                            title:"<%= $name %>",
+                          % if ($music =~ /\.mp3$/i) {
+                              mp3:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
+                          % } elsif ($music =~ /\.ogg$/i) {
+                              oga:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
+                          % } elsif ($music =~ /\.m4a$/i) {
+                              m4a:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
+                          % }
+                        },
+                    % }
+		]);
+	    });
+        % }
+    });
+//]]>
+</script>
