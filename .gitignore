@@ -1,2 +1,2 @@
-SelfConf.pm
-production.log
+lib/SelfConf.pm
+log/*
