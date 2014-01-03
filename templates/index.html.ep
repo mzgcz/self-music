@@ -1,0 +1,87 @@
+% layout 'index';
+% title 'Self Music - 自己的音乐';
+<script type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function() {
+        $('#myForm').ajaxForm({
+            target: '#myInfo',
+            success: function() {
+                $('#myInfo').fadeIn('slow');
+            }
+        });
+    });
+//]]>
+</script> 
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">
+        Self Music - 自己的音乐
+      </a>
+      <ul class="nav">
+        <li class="active">
+          <a href="#">首页</a>
+        </li>
+        <li><a href="mailto:<%= $email %>">联系我们</a></li>
+        <li><a href="http://mzgcz.github.com/self-music">协助与支持</a></li>
+        <li><a href="#">百度网盘最近无法使用的，请使用账户重置功能</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="myInfo" style="text-align:center">
+  % if ($rspn_type eq 'error') {
+        <div class="alert alert-error">
+          出错啦：<%= $response %>
+        </div>
+  % }
+</div>
+<div class="row-fluid top-bcg">
+  <legend>注册和试听</legend>
+  <div class="span4">
+    <form id="myForm" action="/register" method="get">
+      <div class="control-group">
+        <div class="controls">
+          <input type="email" class="input-big" placeholder="电子邮件" name="email" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">
+          <span class="label label-important">选择你的网盘：</span>
+        </label>
+        <div class="controls">
+          <select name="netbox">
+            <option value='bdwp'>百度网盘</option>
+            <option value='jskp'>金山快盘</option>
+            <option value='dropbox'>Dropbox</option>
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-primary btn-large">确定</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="span2 offset2">
+    <table class="table">
+      <thead>
+        <tr>
+          <td><a href="http://<%= $net %>/demo">音乐试听</a></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="http://www.kuaipan.cn">金山快盘</a></td>
+        </tr>
+        <tr>
+          <td><a href="http://pan.baidu.com">百度网盘</a></td>
+        </tr>
+        <tr>
+          <td><a href="https://www.dropbox.com">Dropbox</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

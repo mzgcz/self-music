@@ -1,5 +1,83 @@
 % layout 'player';
-% title 'slef-music';
+% title 'Self Music - 自己的音乐';
+<script type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        
+	var myPlaylist = new jPlayerPlaylist({
+	    jPlayer: "#jquery_jplayer_1",
+	    cssSelectorAncestor: "#jp_container_1"
+	}, [
+                % for my $music (@{$lists->{"self-music"}}) {
+                        % $music =~ /^(.*)\.\w+$/;
+                        % my $name = $1;
+                        % my $murl;
+                        % if ($paths->{"self-music"} eq '/') {
+                            % $murl = SelfCommon::utf8_to_url($paths->{"self-music"}.$music);
+                        % } else {
+                            % $murl = SelfCommon::utf8_to_url($paths->{"self-music"}.'/'.$music);
+                        % }
+                {
+                  title:"<%= $name %>",
+                % if ($music =~ /\.mp3$/i) {
+                    mp3:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
+                % }
+                },
+            % }
+	], {
+	    swfPath: "js",
+            solution: "html, flash",
+	    supplied: "mp3",
+	    wmode: "window"
+	});
+        
+        % foreach my $list (@$plist) {
+            $("#<%= $list %>").click(function() {
+		myPlaylist.setPlaylist([
+                    % for my $music (@{$lists->{$list}}) {
+                        % $music =~ /^(.*)\.\w+$/;
+                        % my $name = $1;
+                        % my $murl;
+                        % if ($paths->{$list} eq '/') {
+                            % $murl = SelfCommon::utf8_to_url($paths->{$list}.$music);
+                        % } else {
+                            % $murl = SelfCommon::utf8_to_url($paths->{$list}.'/'.$music);
+                        % }
+                        {
+                            title:"<%= $name %>",
+                          % if ($music =~ /\.mp3$/i) {
+                              mp3:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
+                          % }
+                        },
+                    % }
+		]);
+	    });
+        % }
+        
+        $("#同步音乐库").click(function() {
+            document.getElementById("mySync").innerHTML = "同步中，请稍候...";
+            var sync_http;
+            if (window.XMLHttpRequest) {
+                sync_http = new XMLHttpRequest();
+            } else {
+                sync_http = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            sync_http.onreadystatechange = function() {
+                if (4==sync_http.readyState && 200==sync_http.status) {
+                    if ("succeed" == sync_http.responseText) {
+                        location.reload();
+                    } else {
+                        document.getElementById("myInfo").innerHTML = sync_http.responseText;
+                        document.getElementById("mySync").innerHTML = "同步出错";
+                    }
+                }
+            }
+            sync_http.open("GET","sync?user=<%= $puser %>&id=<%= $pid %>",true);
+            sync_http.send();
+        })
+    });
+//]]>
+</script>
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container">
@@ -13,9 +91,20 @@
         <li><a href="http://<%= $pnet %>">账户重置</a></li>
         <li><a href="mailto:<%= $email %>">联系我们</a></li>
         <li><a href="http://mzgcz.github.com/self-music">协助与支持</a></li>
-        <li><a href="#">最近计划：更新示例音乐</a></li>
+        <li><a href="#">百度网盘最近无法使用的，请使用账户重置功能</a></li>
       </ul>
     </div>
+  </div>
+</div>
+<div id="myInfo" style="text-align:center">
+  <div class="alert alert-info">
+    % if ($netbox eq 'jskp') {
+        你当前使用的是金山快盘，请将歌曲保存至"/我的应用/self-music"目录下
+    % } elsif ($netbox eq 'bdwp') {
+        你当前使用的是百度网盘，请将歌曲保存至"/我的应用数据/self-music"目录下
+    % } elsif ($netbox eq 'dropbox') {
+        你当前使用的是Dropbox，请将歌曲保存至"/Apps/self-music"目录下
+    % }
   </div>
 </div>
 <div id="jquery_jplayer_1" class="jp-jplayer"></div>
@@ -75,7 +164,7 @@
       </div>
     </div>
   </div>
-  <div class="span6">
+  <div class="span4">
     <table class="table">
       <thead>
         <tr>
@@ -93,67 +182,45 @@
       </tbody>
     </table>
   </div>
+  <div class="span2">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>实用工具</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td id="mySync"><a href="javascript:;" id="同步音乐库">同步音乐库</a></td>
+        </tr>
+        <tr>
+          <td>
+          % if ($netbox eq 'jskp') {
+          <a href="http://www.kuaipan.cn">金山快盘</a>
+          % } elsif ($netbox eq 'bdwp') {
+          <a href="http://pan.baidu.com/disk/home#dir/path=%2Fapps%2Fself-music">百度网盘</a>
+          % } elsif ($netbox eq 'dropbox') {
+          <a href="https://www.dropbox.com/home/Apps/self-music">Dropbox</a>
+          % }
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
-<script type="text/javascript">
-    //<![CDATA[
-    $(document).ready(function(){
-        
-	var myPlaylist = new jPlayerPlaylist({
-	    jPlayer: "#jquery_jplayer_1",
-	    cssSelectorAncestor: "#jp_container_1"
-	}, [
-                % for my $music (@{$lists->{"self-music"}}) {
-                        % $music =~ /^(.*)\.\w+$/;
-                        % my $name = $1;
-                        % my $murl;
-                        % if ($paths->{"self-music"} eq '/') {
-                            % $murl = SelfCommon::utf8_to_url($paths->{"self-music"}.$music);
-                        % } else {
-                            % $murl = SelfCommon::utf8_to_url($paths->{"self-music"}.'/'.$music);
-                        % }
-                {
-                  title:"<%= $name %>",
-                % if ($music =~ /\.mp3$/i) {
-                    mp3:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
-                % } elsif ($music =~ /\.ogg$/i) {
-                    oga:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
-                % } elsif ($music =~ /\.m4a$/i) {
-                    m4a:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
-                % }
-                },
-            % }
-	], {
-	    swfPath: "js",
-	    supplied: "m4a, oga, mp3",
-	    wmode: "window"
-	});
-        
-        % foreach my $list (@$plist) {
-            $("#<%= $list %>").click(function() {
-		myPlaylist.setPlaylist([
-                    % for my $music (@{$lists->{$list}}) {
-                        % $music =~ /^(.*)\.\w+$/;
-                        % my $name = $1;
-                        % my $murl;
-                        % if ($paths->{$list} eq '/') {
-                            % $murl = SelfCommon::utf8_to_url($paths->{$list}.$music);
-                        % } else {
-                            % $murl = SelfCommon::utf8_to_url($paths->{$list}.'/'.$music);
-                        % }
-                        {
-                            title:"<%= $name %>",
-                          % if ($music =~ /\.mp3$/i) {
-                              mp3:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
-                          % } elsif ($music =~ /\.ogg$/i) {
-                              oga:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
-                          % } elsif ($music =~ /\.m4a$/i) {
-                              m4a:"http://<%= $pnet %>/music?user=<%= $puser %>&id=<%= $pid %>&song=<%= $murl %>"
-                          % }
-                        },
-                    % }
-		]);
-	    });
-        % }
-    });
-//]]>
-</script>
+% if ($pid eq '2ba7f99724a6cdd38bb1082fa259b4d8') {
+  <!-- Duoshuo Comment BEGIN -->
+  <div class="ds-thread"></div>
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"self-app"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+  <!-- Duoshuo Comment END -->
+% }

@@ -54,6 +54,17 @@ sub sort_by_pinyin {
   return $collator->sort(@list);
 }
 
+sub combination_parameters {
+    my $parameters = shift;
+    my ($key, $value, @arguments);
+    
+    while (($key, $value) = each %$parameters) {
+        push @arguments, $key.'='.$value;
+    }
+    
+    return join('&', @arguments);
+}
+
 1;
 
 __END__

@@ -33,6 +33,12 @@ sub get_login_addr {
   return ($url, $id);
 }
 
+sub get_pretoken_addr {
+    my ($self, $net, $user, $id) = @_;
+    
+    return "http://$net/pretoken?".'user='.SelfCommon::b64_and_url($user).'&'.'id='.$id;
+}
+
 sub get_token_addr {
     my ($self, $net, $user, $id) = @_;
     

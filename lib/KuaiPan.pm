@@ -3,198 +3,95 @@ package KuaiPan;
 use strict;
 use warnings;
 use SelfConf;
-use SelfCommon;
-use Mojo::JSON;
-require LWP::UserAgent;
+use WebService::Kuaipan;
 
 sub new { bless {}, shift }
 
-my $consumer_secret = SelfConf::JSKP_SECRET;
-
-sub get_signature {
-  return 'oauth_signature='.SelfCommon::create_autograph(@_);
-}
-
-sub get_consumer_key {
-  my $consumer_key = SelfConf::JSKP_KEY;
-  
-  return 'oauth_consumer_key='.$consumer_key;
-}
-
-sub get_nonce {
-  return 'oauth_nonce='.SelfCommon::rand_str(31);
-}
-
-sub get_signature_method {
-  return 'oauth_signature_method='.'HMAC-SHA1';
-}
-
-sub get_timestamp {
-  return 'oauth_timestamp='.time();
-}
-
-sub get_token {
-  my $token = shift;
-  
-  return 'oauth_token='.$token;
-}
-
-sub get_version {
-  return 'oauth_version='.'1.0';
-}
-
-sub get_callback {
-  my $cb_url = shift;
-  
-  return 'oauth_callback='.SelfCommon::url_to_url($cb_url);
-}
-
-sub get_file_path {
-  my $file = shift;
-  
-  return 'path='.SelfCommon::utf8_to_url($file);
-}
-
-sub get_file_root {
-  return 'root='.'app_folder';
-}
-
-sub combination_para {
-  my $para_str = join '&', @_;
-  
-  return $para_str;
-}
-
 sub request_token {
   my ($self, $cb_url) = @_;
-  my $url = 'https://openapi.kuaipan.cn/open/requestToken';
-  my $oauth_callback = get_callback($cb_url);
-  my $oauth_consumer_key = get_consumer_key();
-  my $oauth_nonce = get_nonce();
-  my $oauth_signature_method = get_signature_method();
-  my $oauth_timestamp = get_timestamp();
-  my $oauth_version = get_version();
-  my $request_para = combination_para($oauth_callback, $oauth_consumer_key,$oauth_nonce,$oauth_signature_method,$oauth_timestamp,$oauth_version);
-  my $request_src = combination_para('GET',SelfCommon::url_to_url($url),SelfCommon::url_to_url($request_para));
-  my $oauth_signature = get_signature($request_src, $consumer_secret.'&');
-  my $request_url = $url.'?'.combination_para($oauth_signature,$request_para);
-  my $json = Mojo::JSON->new;
-  my $ua = LWP::UserAgent->new;
-  $ua->timeout(60);
-  $ua->env_proxy;
-  my $response = $ua->get($request_url);
-  my ($request_json, $oauth_token, $oauth_token_secret);
-  if ($response->is_success) {
-    $request_json = $json->decode($response->decoded_content);
-    $oauth_token = $request_json->{"oauth_token"};
-    $oauth_token_secret = $request_json->{"oauth_token_secret"};
-  }
-  
-  return ($oauth_token, $oauth_token_secret);
-}
-
-sub authorize_token {
-  my ($self, $oauth_token) = @_;
-  my $url = 'https://www.kuaipan.cn/api.php?ac=open&op=authorise';
-  
-  return combination_para($url,get_token($oauth_token));
+  my $kuaipan = WebService::Kuaipan->new({
+                                          key => SelfConf::JSKP_KEY,
+                                          secret => SelfConf::JSKP_SECRET
+                                         });
+  my $url = $kuaipan->login($cb_url);
+  return ($url, $kuaipan->request_token, $kuaipan->request_secret);
 }
 
 sub access_token {
-  my ($self, $token, $token_secret) = @_;
-  my $url = 'https://openapi.kuaipan.cn/open/accessToken';
-  my $oauth_consumer_key = get_consumer_key();
-  my $oauth_nonce = get_nonce();
-  my $oauth_signature_method = get_signature_method();
-  my $oauth_timestamp = get_timestamp();
-  my $pre_oauth_token = get_token($token);
-  my $oauth_version = get_version();
-  my $access_para = combination_para($oauth_consumer_key,$oauth_nonce,$oauth_signature_method,$oauth_timestamp,$pre_oauth_token,$oauth_version);
-  my $access_src = combination_para('GET',SelfCommon::url_to_url($url),SelfCommon::url_to_url($access_para));
-  my $oauth_signature = get_signature($access_src, combination_para($consumer_secret,$token_secret));
-  my $access_url = $url.'?'.combination_para($oauth_signature,$access_para);
-  my $json = Mojo::JSON->new;
-  my $ua = LWP::UserAgent->new;
-  $ua->timeout(60);
-  $ua->env_proxy;
-  my $response = $ua->get($access_url);
-  my ($access_json, $oauth_token, $oauth_token_secret);
-  if ($response->is_success) {
-    $access_json = $json->decode($response->decoded_content);
-    $oauth_token = $access_json->{"oauth_token"};
-    $oauth_token_secret = $access_json->{"oauth_token_secret"};
-  }
-  
-  return ($oauth_token, $oauth_token_secret);
+  my ($self, $token, $token_secret, $verifier) = @_;
+  my $kuaipan = WebService::Kuaipan->new({
+                                          key => SelfConf::JSKP_KEY,
+                                          secret => SelfConf::JSKP_SECRET,
+                                          request_token => $token,
+                                          request_secret => $token_secret
+                                         });
+  $kuaipan->auth($verifier);
+  return($kuaipan->access_token, $kuaipan->access_secret);
 }
 
 sub get_one_list {
   my @musics;
-  my ($self_music, $self_path, $token, $token_secret, $level, $url) = @_;
-  my $oauth_consumer_key = get_consumer_key();
-  my $oauth_nonce = get_nonce();
-  my $oauth_signature_method = get_signature_method();
-  my $oauth_timestamp = get_timestamp();
-  my $oauth_token = get_token($token);
-  my $oauth_version = get_version();
-  my $access_para = combination_para($oauth_consumer_key,$oauth_nonce,$oauth_signature_method,$oauth_timestamp,$oauth_token,$oauth_version);
-  my $access_src = combination_para('GET',SelfCommon::url_to_url($url),SelfCommon::url_to_url($access_para));
-  my $oauth_signature = get_signature($access_src, combination_para($consumer_secret,$token_secret));
-  my $access_url = $url.'?'.combination_para($oauth_signature,$access_para);
-  my $json = Mojo::JSON->new;
-  my $ua = LWP::UserAgent->new;
-  $ua->timeout(60);
-  $ua->env_proxy;
-  my $response = $ua->get($access_url);
-  if ($response->is_success) {
-    my $access_json = $json->decode($response->decoded_content);
-    unless ($access_json->{is_deleted}) {
-      foreach my $file (@{$access_json->{"files"}}) {
-        unless ($file->{"is_deleted"}) {
-          if ($file->{"type"} eq "file") {
-            if ($file->{"name"} =~ /\.(mp3|ogg|m4a)$/i) {
-              push @musics, $file->{"name"};
-            }
-          } elsif ($file->{"type"} eq "folder") {
-            if (0 == $level) {
-              get_one_list($self_music, $self_path, $token, $token_secret, $level+1, $url.'/'.SelfCommon::utf8_to_url($file->{"name"}));
-            }
+  my ($self_music, $self_path, $token, $token_secret, $level, $path) = @_;
+  my $kuaipan = WebService::Kuaipan->new({
+                                          key => SelfConf::JSKP_KEY,
+                                          secret => SelfConf::JSKP_SECRET,
+                                          access_token => $token,
+                                          access_secret => $token_secret,
+                                          root => 'app_folder'
+                                         });
+  my $access_json = $kuaipan->metadata($path);
+  unless ($access_json->{"is_deleted"}) {
+    foreach my $file (@{$access_json->{"files"}}) {
+      unless ($file->{"is_deleted"}) {
+        if ($file->{"type"} eq "file") {
+          if ($file->{"name"} =~ /\.mp3$/i) {
+            push @musics, $file->{"name"};
+          }
+        } elsif ($file->{"type"} eq "folder") {
+          if (0 == $level) {
+            get_one_list($self_music, $self_path, $token, $token_secret, $level+1, $path.$file->{"name"});
           }
         }
       }
-      @musics = SelfCommon::sort_by_pinyin(@musics);
-      $self_music->{$access_json->{"name"}} = \@musics;
-      $self_path->{$access_json->{"name"}} = $access_json->{"path"};
     }
+    @musics = SelfCommon::sort_by_pinyin(@musics);
+    $self_music->{$access_json->{"name"}} = \@musics;
+    $self_path->{$access_json->{"name"}} = $access_json->{"path"};
   }
 }
 
 sub get_play_list {
-  my ($self, $self_music, $self_path, $token, $token_secret) = @_;
+  my ($self, $token, $token_secret) = @_;
   
-  get_one_list($self_music, $self_path, $token, $token_secret, 0, 'http://openapi.kuaipan.cn/1/metadata/app_folder');
-  return SelfCommon::sort_by_pinyin(keys %$self_music);
+  my (%self_music, %self_path);
+  get_one_list(\%self_music, \%self_path, $token, $token_secret, 0, '');
   
+  my %self_plist;
+  $self_plist{"music"} = \%self_music;
+  $self_plist{"path"} = \%self_path;
+  
+  return \%self_plist;
 }
 
 sub get_file_url {
-  my @music_list;
   my ($self, $file, $token, $token_secret) = @_;
-  my $url = 'http://api-content.dfs.kuaipan.cn/1/fileops/download_file';
-  my $oauth_consumer_key = get_consumer_key();
-  my $oauth_nonce = get_nonce();
-  my $oauth_signature_method = get_signature_method();
-  my $oauth_timestamp = get_timestamp();
-  my $oauth_token = get_token($token);
-  my $oauth_version = get_version();
-  my $path = get_file_path($file);
-  my $root = get_file_root();
-  my $access_para = combination_para($oauth_consumer_key,$oauth_nonce,$oauth_signature_method,$oauth_timestamp,$oauth_token,$oauth_version,$path,$root);
-  my $access_src = combination_para('GET',SelfCommon::url_to_url($url),SelfCommon::url_to_url($access_para));
-  my $oauth_signature = get_signature($access_src, combination_para($consumer_secret,$token_secret));
-  my $file_url = $url.'?'.combination_para($oauth_signature,$access_para);
+  my $kuaipan = WebService::Kuaipan->new({
+                                          key => SelfConf::JSKP_KEY,
+                                          secret => SelfConf::JSKP_SECRET,
+                                          access_token => $token,
+                                          access_secret => $token_secret,
+                                          root => 'app_folder'
+                                         });
+  my $url = $kuaipan->oauth_request_url({
+                                         method => 'GET',
+                                         url => $kuaipan->url('http://api-content.dfs.kuaipan.cn/1/fileops/download_file'),
+                                         extra_params => {
+                                                          root => $kuaipan->root,
+                                                          path => $file,
+                                                         }
+                                        });
   
-  return $file_url;
+  return $url;
 }
 
 1;

@@ -3,16 +3,17 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title><%= title %></title>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="/jquery/jquery.min.js"></script> 
+    <script src="/jquery/jquery.form.js"></script> 
+    <style type="text/css">
+      .top{padding-top:40px}
+      .top-bcg{padding-top:40px;background-color:#fff}
+    </style>
   </head>
-  <body>
+  <body class="top">
     <div class="container">
       <%= content %>
     </div>
-<script type="text/javascript">
-var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F8147d34de5b11c55646556467e3b13c4' type='text/javascript'%3E%3C/script%3E"));
-</script>
   </body>
 </html>
-

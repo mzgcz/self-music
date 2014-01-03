@@ -1,6 +1,0 @@
-% layout 'default';
-% title 'Error';
-<div class="alert alert-error"  style="text-align:center">
-  出错啦！<%= $reason %>
-</div>
-
