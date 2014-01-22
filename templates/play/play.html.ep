@@ -1,5 +1,6 @@
 % layout 'player';
 % title 'Self Music - 自己的音乐';
+% my $pno = 0;
 <script type="text/javascript">
     //<![CDATA[
     $(document).ready(function(){
@@ -30,9 +31,13 @@
 	    supplied: "mp3",
 	    wmode: "window"
 	});
-        
+
+
+        % $pno = 0;
         % foreach my $list (@$plist) {
-            $("#<%= $list %>").click(function() {
+            % my $list_id_no = $pid.'_'.$pno;
+            % $pno++;
+            $("#<%= $list_id_no %>").click(function() {
 		myPlaylist.setPlaylist([
                     % for my $music (@{$lists->{$list}}) {
                         % $music =~ /^(.*)\.\w+$/;
@@ -173,10 +178,14 @@
         </tr>
       </thead>
       <tbody>
+
+        % $pno = 0;
         % foreach my $list (@$plist) {
+            % my $list_id_no = $pid.'_'.$pno;
+            % $pno++;
         <tr>
           <td></td>
-          <td><a href="javascript:;" id="<%= $list %>"><%= $list %></a></td>
+          <td><a href="javascript:;" id="<%= $list_id_no %>"><%= $list %></a></td>
         </tr>
         % }
       </tbody>

@@ -30,7 +30,7 @@ sub startup {
   
   $self->config(hypnotoad => {listen => ['http://*:80'], workers => 3});
   
-  $self->secret(SelfConf::APP_SECRET);
+  # $self->secret(SelfConf::APP_SECRET);
   
   my $self_db = SelfDB->new;
   $self->helper(self_db => sub { return $self_db });
