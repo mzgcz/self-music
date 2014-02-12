@@ -203,13 +203,16 @@
           <td id="mySync"><a href="javascript:;" id="同步音乐库">同步音乐库</a></td>
         </tr>
         <tr>
+          <td><a href="http://me.alipay.com/mzgcz" target="_blank">赞助我们</a></td>
+        </tr>
+        <tr>
           <td>
           % if ($netbox eq 'jskp') {
-          <a href="http://www.kuaipan.cn">金山快盘</a>
+          <a href="http://www.kuaipan.cn" target="_blank">金山快盘</a>
           % } elsif ($netbox eq 'bdwp') {
-          <a href="http://pan.baidu.com/disk/home#dir/path=%2Fapps%2Fself-music">百度网盘</a>
+          <a href="http://pan.baidu.com/disk/home#dir/path=%2Fapps%2Fself-music" target="_blank">百度网盘</a>
           % } elsif ($netbox eq 'dropbox') {
-          <a href="https://www.dropbox.com/home/Apps/self-music">Dropbox</a>
+          <a href="https://www.dropbox.com/home/Apps/self-music" target="_blank">Dropbox</a>
           % }
           </td>
         </tr>
