@@ -10,19 +10,19 @@ use Register;
 use SelfCommon;
 
 sub refresh_user_token {
-    my $self = shift;
+  my $self = shift;
     
-    my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime();
-    if (1==$mday || 15==$mday) {
-        my $refresh_info = $self->self_db->get_user_refresh_info();
-        foreach my $info (@$refresh_info) {
-            my ($user, $id, $refresh_token) = @$info;
-            my ($new_refresh_token, $new_access_token) = $self->self_baiduyun->refresh_token($refresh_token);
-            if ($new_access_token && $new_refresh_token) {
-                $self->self_db->save_user_info($user, $id, $new_access_token, $new_refresh_token);
-            }
-        }
+  my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime();
+  if (1==$mday || 15==$mday) {
+    my $refresh_info = $self->self_db->get_user_refresh_info();
+    foreach my $info (@$refresh_info) {
+      my ($user, $id, $refresh_token) = @$info;
+      my ($new_refresh_token, $new_access_token) = $self->self_baiduyun->refresh_token($refresh_token);
+      if ($new_access_token && $new_refresh_token) {
+        $self->self_db->save_user_info($user, $id, $new_access_token, $new_refresh_token);
+      }
     }
+  }
 }
 
 sub startup {
@@ -62,6 +62,9 @@ sub startup {
   $r->get('/sync')->to('play#sync')->name('sync');
   $r->get('/music')->to('play#music')->name('music');
   $r->get('/demo')->to('play#demo')->name('demo');
+
+  $r->get('/mobile')->to('mobile#index');
+  $r->get('/mobile/play')->to('mobile#play');
 }
 
 1;
