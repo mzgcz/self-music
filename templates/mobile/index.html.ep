@@ -9,7 +9,6 @@
       <span class="icon-bar"></span>
     </button>
     <a class="navbar-brand" href="#">Self Music</a>
-    <a class="navbar-brand" href="#">首页</a>
     <a class="navbar-brand" href="#">同步音乐库</a>
   </div>
 </nav>

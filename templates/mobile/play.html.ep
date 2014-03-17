@@ -95,8 +95,7 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="#">Self Music</a>
-    <a class="navbar-brand" href="#">首页</a>
+    <a class="navbar-brand" href="#">音乐库</a>
     <a class="navbar-brand" href="#">封神演义</a>
   </div>
 </nav>
