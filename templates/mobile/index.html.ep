@@ -9,13 +9,8 @@
       <span class="icon-bar"></span>
     </button>
     <a class="navbar-brand" href="#">Self Music</a>
-  </div>
-
-  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <ul class="nav navbar-nav">
-      <li class="active"><a href="#">首页</a></li>
-      <li><a href="#">同步音乐库</a></li>
-    </ul>
+    <a class="navbar-brand" href="#">首页</a>
+    <a class="navbar-brand" href="#">同步音乐库</a>
   </div>
 </nav>
 <div class="list-group">
