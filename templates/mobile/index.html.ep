@@ -1,5 +1,32 @@
 % layout 'default';
 % title 'Self Music - 自己的音乐';
+<script type="text/javascript">
+  //<![CDATA[
+  $(document).ready(function() {
+    $("#同步音乐库").click(function() {
+      document.getElementById("同步音乐库").innerHTML = "同步中...";
+      var sync_http;
+      if (window.XMLHttpRequest) {
+        sync_http = new XMLHttpRequest();
+      } else {
+        sync_http = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      sync_http.onreadystatechange = function() {
+        if (4==sync_http.readyState && 200==sync_http.status) {
+          if ("succeed" == sync_http.responseText) {
+            location.reload();
+          } else {
+            document.getElementById("同步音乐库").innerHTML = sync_http.responseText;
+            document.getElementById("同步音乐库").innerHTML = "同步出错";
+          }
+        }
+      }
+      sync_http.open("GET","sync?user=<%= $puser %>&id=<%= $pid %>",true);
+      sync_http.send();
+    });
+  });
+//]]>
+</script>
 <nav class="navbar navbar-default" role="navigation">
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -9,11 +36,18 @@
       <span class="icon-bar"></span>
     </button>
     <a class="navbar-brand" href="#">Self Music</a>
-    <a class="navbar-brand" href="#">同步音乐库</a>
+    <a href="javascript:;" id="同步音乐库" class="navbar-brand">同步音乐库</a>
   </div>
 </nav>
+<div id="myInfo" style="text-align:center">
+  % if ($rspn_type eq 'error') {
+        <div class="alert alert-danger">
+          出错啦：<%= $response %>
+        </div>
+  % }
+</div>
 <div class="list-group">
-  <a href="#" class="list-group-item">self_music</a>
-  <a href="#" class="list-group-item">封神演义</a>
-  <a href="#" class="list-group-item">孤独</a>
+  % foreach my $list (@$plist) {
+  <a href="#" class="list-group-item"><%= $list %></a>
+  % }
 </div>
