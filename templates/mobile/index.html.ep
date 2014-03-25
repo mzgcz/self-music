@@ -48,6 +48,6 @@
 </div>
 <div class="list-group">
   % foreach my $list (@$plist) {
-  <a href="#" class="list-group-item"><%= $list %></a>
+  <a href="http://<%= $pnet %>/mobile/play?user=<%= $puser %>&id=<%= $pid %>&item=<%= $list %>" class="list-group-item"><%= $list %></a>
   % }
 </div>
