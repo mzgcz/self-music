@@ -203,6 +203,9 @@
           <td id="mySync"><a href="javascript:;" id="同步音乐库">同步音乐库</a></td>
         </tr>
         <tr>
+          <td><a href="http://<%= $pnet %>/mobile?user=<%= $puser %>&id=<%= $pid %>">手机音乐</a></td>
+        </tr>
+        <tr>
           <td><a href="http://me.alipay.com/mzgcz" target="_blank">赞助我们</a></td>
         </tr>
         <tr>
